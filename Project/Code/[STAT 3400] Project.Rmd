@@ -1,0 +1,346 @@
+---
+title: '[STAT 3400] Project'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Examining the raw data
+```{r}
+MPI <- read.csv("/Users/Home/Downloads/MPI.csv")
+GDP <- read.csv("/Users/Home/Downloads/GDP.csv")
+
+GDP
+MPI
+
+GDP <- GDP[,2:6]
+GDP <- as.matrix(t(GDP))
+hist(GDP)
+
+MPI <- GDP[,2:6]
+MPI <- as.matrix(t(MPI))
+hist(MPI)
+```
+## Categorizing elements per country (Add hist graphs per country)
+```{r}
+MPI <- read.csv("/Users/Home/Downloads/MPI.csv")
+GDP <- read.csv("/Users/Home/Downloads/GDP.csv")
+
+Bangladesh_MPI <- MPI[1,]
+Bangladesh_GDP <- GDP[1,]
+
+D.R.Congo_MPI <- MPI[2,]
+D.R.Congo_GDP <- GDP[2,]
+
+Dominican_Republic_MPI <- MPI[3,]
+Dominican_Republic_GDP <- GDP[3,]
+
+Jordan_MPI <- MPI[4,]
+Jordan_GDP <- GDP[4,]
+
+Lesotho_MPI <- MPI[5,]
+Lesotho_GDP <- GDP[5,]
+
+Malawi_MPI <- MPI[6,]
+Malawi_GDP <- GDP[6,]
+
+Mongolia_MPI <- MPI[7,]
+Mongolia_GDP <- GDP[7,]
+
+Morocco_MPI <- MPI[8,]
+Morocco_GDP <- GDP[8,]
+
+Nigeria_MPI <- MPI[9,]
+Nigeria_GDP <- GDP[9,]
+
+Peru_MPI <- MPI[10,]
+Peru_GDP <- GDP[10,]
+
+Philippines_MPI <- MPI[11,]
+Philippines_GDP <- GDP[11,]
+
+Senegal_MPI <- MPI[12,]
+Senegal_GDP <- GDP[12,]
+
+Sierra_Leone_MPI <- MPI[13,]
+Sierra_Leone_GDP <- GDP[13,]
+
+South_Africa_MPI <- MPI[14,]
+South_Africa_GDP <- GDP[14,]
+
+Suriname_MPI <- MPI[15,]
+Suriname_GDP <- GDP[15,]
+
+Togo_MPI <- MPI[16,]
+Togo_GDP <- GDP[16,]
+
+Zimbabwe_MPI <- MPI[17,]
+Zimbabwe_GDP <- GDP[17,]
+```
+## Looking into each country's MPI & GDP over 10 years
+```{r}
+Bangladesh_GDP <- Bangladesh_GDP[1,2:11]
+Bangladesh_GDP <- as.matrix(t(Bangladesh_GDP))
+hist(Bangladesh_GDP)
+
+Bangladesh_MPI <- Bangladesh_MPI[1,2:6]
+Bangladesh_MPI <- as.matrix(t(Bangladesh_MPI))
+hist(Bangladesh_MPI)
+
+D.R.Congo_GDP <- D.R.Congo_GDP[1,2:11]
+D.R.Congo_GDP <- as.matrix(t(D.R.Congo_GDP))
+hist(D.R.Congo_GDP)
+
+D.R.Congo_MPI <- D.R.Congo_MPI[1,2:6]
+D.R.Congo_MPI <- as.matrix(t(D.R.Congo_MPI))
+hist(D.R.Congo_MPI)
+
+Dominican_Republic_GDP <- Dominican_Republic_GDP[1,2:11]
+Dominican_Republic_GDP <- as.matrix(t(Dominican_Republic_GDP))
+hist(Dominican_Republic_GDP)
+
+Dominican_Republic_MPI <- Dominican_Republic_MPI[1,2:6]
+Dominican_Republic_MPI <- as.matrix(t(Dominican_Republic_MPI))
+hist(Dominican_Republic_MPI)
+
+Jordan_GDP <- Jordan_GDP[1,2:11]
+Jordan_GDP <- as.matrix(t(Jordan_GDP))
+hist(Jordan_GDP)
+
+Jordan_MPI <- Jordan_MPI[1,2:6]
+Jordan_MPI <- as.matrix(t(Jordan_MPI))
+hist(Jordan_MPI)
+
+Lesotho_GDP <- Lesotho_GDP[1,2:11]
+Lesotho_GDP <- as.matrix(t(Lesotho_GDP))
+hist(Lesotho_GDP)
+
+Lesotho_MPI <- Lesotho_MPI[1,2:6]
+Lesotho_MPI <- as.matrix(t(Lesotho_MPI))
+hist(Lesotho_MPI)
+
+Malawi_GDP <- Malawi_GDP[1,2:11]
+Malawi_GDP <- as.matrix(t(Malawi_GDP))
+hist(Malawi_GDP)
+
+Malawi_MPI <- Malawi_MPI[1,2:6]
+Malawi_MPI <- as.matrix(t(Malawi_MPI))
+hist(Malawi_MPI)
+
+Mongolia_GDP <- Mongolia_GDP[1,2:11]
+Mongolia_GDP <- as.matrix(t(Mongolia_GDP))
+hist(Mongolia_GDP)
+
+Mongolia_MPI <- Mongolia_MPI[1,2:6]
+Mongolia_MPI <- as.matrix(t(Mongolia_MPI))
+hist(Mongolia_MPI)
+
+Morocco_GDP <- Morocco_GDP[1,2:11]
+Morocco_GDP <- as.matrix(t(Morocco_GDP))
+hist(Morocco_GDP)
+
+Morocco_MPI <- Morocco_MPI[1,2:6]
+Morocco_MPI <- as.matrix(t(Morocco_MPI))
+hist(Morocco_MPI)
+
+Nigeria_GDP <- Nigeria_GDP[1,2:11]
+Nigeria_GDP <- as.matrix(t(Nigeria_GDP))
+hist(Nigeria_GDP)
+
+Nigeria_MPI <- Nigeria_MPI[1,2:6]
+Nigeria_MPI <- as.matrix(t(Nigeria_MPI))
+hist(Nigeria_MPI)
+
+Peru_GDP <- Peru_GDP[1,2:11]
+Peru_GDP <- as.matrix(t(Peru_GDP))
+hist(Peru_GDP)
+
+Peru_MPI <- Peru_MPI[1,2:6]
+Peru_MPI <- as.matrix(t(Peru_MPI))
+hist(Peru_MPI)
+
+Philippines_GDP <- Philippines_GDP[1,2:11]
+Philippines_GDP <- as.matrix(t(Philippines_GDP))
+hist(Philippines_GDP)
+
+Philippines_MPI <- Philippines_MPI[1,2:6]
+Philippines_MPI <- as.matrix(t(Philippines_MPI))
+hist(Philippines_MPI)
+
+Senegal_GDP <- Senegal_GDP[1,2:11]
+Senegal_GDP <- as.matrix(t(Senegal_GDP))
+hist(Senegal_GDP)
+
+Senegal_MPI <- Senegal_MPI[1,2:6]
+Senegal_MPI <- as.matrix(t(Senegal_MPI))
+hist(Senegal_MPI)
+
+Sierra_Leone_GDP <- Sierra_Leone_GDP[1,2:11]
+Sierra_Leone_GDP <- as.matrix(t(Sierra_Leone_GDP))
+hist(Sierra_Leone_GDP)
+
+Sierra_Leone_MPI <- Sierra_Leone_MPI[1,2:6]
+Sierra_Leone_MPI <- as.matrix(t(Sierra_Leone_MPI))
+hist(Sierra_Leone_MPI)
+
+South_Africa_GDP <- South_Africa_GDP[1,2:11]
+South_Africa_GDP <- as.matrix(t(South_Africa_GDP))
+hist(South_Africa_GDP)
+
+South_Africa_MPI <- South_Africa_MPI[1,2:6]
+South_Africa_MPI <- as.matrix(t(South_Africa_MPI))
+hist(South_Africa_MPI)
+
+Suriname_GDP <- Suriname_GDP[1,2:11]
+Suriname_GDP <- as.matrix(t(Suriname_GDP))
+hist(Suriname_GDP)
+
+Suriname_MPI <- Suriname_MPI[1,2:6]
+Suriname_MPI <- as.matrix(t(Suriname_MPI))
+hist(Suriname_MPI)
+
+Togo_GDP <- Togo_GDP[1,2:11]
+Togo_GDP <- as.matrix(t(Togo_GDP))
+hist(Togo_GDP)
+
+Togo_MPI <- Togo_MPI[1,2:6]
+Togo_MPI <- as.matrix(t(Togo_MPI))
+hist(Togo_MPI)
+
+Zimbabwe_GDP <- Zimbabwe_GDP[1,2:11]
+Zimbabwe_GDP <- as.matrix(t(Zimbabwe_GDP))
+hist(Zimbabwe_GDP)
+
+Zimbabwe_MPI <- Zimbabwe_MPI[1,2:6]
+Zimbabwe_MPI <- as.matrix(t(Zimbabwe_MPI))
+hist(Zimbabwe_MPI)
+```
+## Measuring the 10 Year mean per country for each category (Add hist graphs per country)
+```{r}
+Bangladesh_MPI <- as.data.frame(Bangladesh_MPI)
+Bangladesh_MPI_10Year_Mean <- mean(Bangladesh_MPI$Year.1.2 + Bangladesh_MPI$Year.3.4 + Bangladesh_MPI$Year.5.6 + Bangladesh_MPI$Year.7.8 + Bangladesh_MPI$Year.9.10)
+Bangladesh_GDP <- as.data.frame(Bangladesh_GDP)
+Bangladesh_GDP_10Year_Mean <- mean(Bangladesh_GDP$Year.1 + Bangladesh_GDP$Year.2 + Bangladesh_GDP$Year.3 + Bangladesh_GDP$Year.4 + Bangladesh_GDP$Year.5 + Bangladesh_GDP$Year.6 + Bangladesh_GDP$Year.7 + Bangladesh_GDP$Year.8 + Bangladesh_GDP$Year.9 + Bangladesh_GDP$Year.10)
+
+Bangladesh_MPI_10Year_Mean
+Bangladesh_GDP_10Year_Mean
+
+D.R.Congo_MPI <- as.data.frame(D.R.Congo_MPI)
+D.R.Congo_MPI_10Year_Mean <- (D.R.Congo_MPI$Year.1.2 + D.R.Congo_MPI$Year.3.4 + D.R.Congo_MPI$Year.5.6 + D.R.Congo_MPI$Year.7.8 + D.R.Congo_MPI$Year.9.10) / 5
+D.R.Congo_GDP <- as.data.frame(D.R.Congo_GDP)
+D.R.Congo_GDP_10Year_Mean <- (D.R.Congo_GDP$Year.1 + D.R.Congo_GDP$Year.2 + D.R.Congo_GDP$Year.3 + D.R.Congo_GDP$Year.4 + D.R.Congo_GDP$Year.5 + D.R.Congo_GDP$Year.6 + D.R.Congo_GDP$Year.7 + D.R.Congo_GDP$Year.8 + D.R.Congo_GDP$Year.9 + D.R.Congo_GDP$Year.10) / 10
+
+Dominican_Republic_MPI <- as.data.frame(Dominican_Republic_MPI)
+Dominican_Republic_MPI_10Year_Mean <- (Dominican_Republic_MPI$Year.1.2 + Dominican_Republic_MPI$Year.3.4 + Dominican_Republic_MPI$Year.5.6 + Dominican_Republic_MPI$Year.7.8 + Dominican_Republic_MPI$Year.9.10) / 5
+Dominican_Republic_GDP <- as.data.frame(Dominican_Republic_GDP)
+Dominican_Republic_GDP_10Year_Mean <- (Dominican_Republic_GDP$Year.1 + Dominican_Republic_GDP$Year.2 + Dominican_Republic_GDP$Year.3 + Dominican_Republic_GDP$Year.4 + Dominican_Republic_GDP$Year.5 + Dominican_Republic_GDP$Year.6 + Dominican_Republic_GDP$Year.7 + Dominican_Republic_GDP$Year.8 + Dominican_Republic_GDP$Year.9 + Dominican_Republic_GDP$Year.10) / 10
+
+Jordan_MPI <- as.data.frame(Jordan_MPI)
+Jordan_MPI_10Year_Mean <- (Jordan_MPI$Year.1.2 + Jordan_MPI$Year.3.4 + Jordan_MPI$Year.5.6 + Jordan_MPI$Year.7.8 + Jordan_MPI$Year.9.10) / 5
+Jordan_GDP <- as.data.frame(Jordan_GDP)
+Jordan_GDP_10Year_Mean <- (Jordan_GDP$Year.1 + Jordan_GDP$Year.2 + Jordan_GDP$Year.3 + Jordan_GDP$Year.4 + Jordan_GDP$Year.5 + Jordan_GDP$Year.6 + Jordan_GDP$Year.7 + Jordan_GDP$Year.8 + Jordan_GDP$Year.9 + Jordan_GDP$Year.10) / 10
+
+Lesotho_MPI <- as.data.frame(Lesotho_MPI)
+Lesotho_MPI_10Year_Mean <- (Lesotho_MPI$Year.1.2 + Lesotho_MPI$Year.3.4 + Lesotho_MPI$Year.5.6 + Lesotho_MPI$Year.7.8 + Lesotho_MPI$Year.9.10) / 5
+Lesotho_GDP <- as.data.frame(Lesotho_GDP)
+Lesotho_GDP_10Year_Mean <- (Lesotho_GDP$Year.1 + Lesotho_GDP$Year.2 + Lesotho_GDP$Year.3 + Lesotho_GDP$Year.4 + Lesotho_GDP$Year.5 + Lesotho_GDP$Year.6 + Lesotho_GDP$Year.7 + Lesotho_GDP$Year.8 + Lesotho_GDP$Year.9 + Lesotho_GDP$Year.10) / 10
+
+Malawi_MPI <- as.data.frame(Malawi_MPI)
+Malawi_MPI_10Year_Mean <- (Malawi_MPI$Year.1.2 + Malawi_MPI$Year.3.4 + Malawi_MPI$Year.5.6 + Malawi_MPI$Year.7.8 + Malawi_MPI$Year.9.10) / 5
+Malawi_GDP <- as.data.frame(Malawi_GDP)
+Malawi_GDP_10Year_Mean <- (Malawi_GDP$Year.1 + Malawi_GDP$Year.2 + Malawi_GDP$Year.3 + Malawi_GDP$Year.4 + Malawi_GDP$Year.5 + Malawi_GDP$Year.6 + Malawi_GDP$Year.7 + Malawi_GDP$Year.8 + Malawi_GDP$Year.9 + Malawi_GDP$Year.10) / 10
+
+Mongolia_MPI <- as.data.frame(Mongolia_MPI)
+Mongolia_MPI_10Year_Mean <- (Mongolia_MPI$Year.1.2 + Mongolia_MPI$Year.3.4 + Mongolia_MPI$Year.5.6 + Mongolia_MPI$Year.7.8 + Mongolia_MPI$Year.9.10) / 5
+Mongolia_GDP <- as.data.frame(Mongolia_GDP)
+Mongolia_GDP_10Year_Mean <- (Mongolia_GDP$Year.1 + Mongolia_GDP$Year.2 + Mongolia_GDP$Year.3 + Mongolia_GDP$Year.4 + Mongolia_GDP$Year.5 + Mongolia_GDP$Year.6 + Mongolia_GDP$Year.7 + Mongolia_GDP$Year.8 + Mongolia_GDP$Year.9 + Mongolia_GDP$Year.10) / 10
+
+Morocco_MPI <- as.data.frame(Morocco_MPI)
+Morocco_MPI_10Year_Mean <- (Morocco_MPI$Year.1.2 + Morocco_MPI$Year.3.4 + Morocco_MPI$Year.5.6 + Morocco_MPI$Year.7.8 + Morocco_MPI$Year.9.10) / 5
+Morocco_GDP <- as.data.frame(Morocco_GDP)
+Morocco_GDP_10Year_Mean <- (Morocco_GDP$Year.1 + Morocco_GDP$Year.2 + Morocco_GDP$Year.3 + Morocco_GDP$Year.4 + Morocco_GDP$Year.5 + Morocco_GDP$Year.6 + Morocco_GDP$Year.7 + Morocco_GDP$Year.8 + Morocco_GDP$Year.9 + Morocco_GDP$Year.10) / 10
+
+Nigeria_MPI <- as.data.frame(Nigeria_MPI)
+Nigeria_MPI_10Year_Mean <- (Nigeria_MPI$Year.1.2 + Nigeria_MPI$Year.3.4 + Nigeria_MPI$Year.5.6 + Nigeria_MPI$Year.7.8 + Nigeria_MPI$Year.9.10) / 5
+Nigeria_GDP <- as.data.frame(Nigeria_GDP)
+Nigeria_GDP_10Year_Mean <- (Nigeria_GDP$Year.1 + Nigeria_GDP$Year.2 + Nigeria_GDP$Year.3 + Nigeria_GDP$Year.4 + Nigeria_GDP$Year.5 + Nigeria_GDP$Year.6 + Nigeria_GDP$Year.7 + Nigeria_GDP$Year.8 + Nigeria_GDP$Year.9 + Nigeria_GDP$Year.10) / 10
+
+Peru_MPI <- as.data.frame(Peru_MPI)
+Peru_MPI_10Year_Mean <- (Peru_MPI$Year.1.2 + Peru_MPI$Year.3.4 + Peru_MPI$Year.5.6 + Peru_MPI$Year.7.8 + Peru_MPI$Year.9.10) / 5
+Peru_GDP <- as.data.frame(Peru_GDP)
+Peru_GDP_10Year_Mean <- (Peru_GDP$Year.1 + Peru_GDP$Year.2 + Peru_GDP$Year.3 + Peru_GDP$Year.4 + Peru_GDP$Year.5 + Peru_GDP$Year.6 + Peru_GDP$Year.7 + Peru_GDP$Year.8 + Peru_GDP$Year.9 + Peru_GDP$Year.10) / 10
+
+Philippines_MPI <- as.data.frame(Philippines_MPI)
+Philippines_MPI_10Year_Mean <- (Philippines_MPI$Year.1.2 + Philippines_MPI$Year.3.4 + Philippines_MPI$Year.5.6 + Philippines_MPI$Year.7.8 + Philippines_MPI$Year.9.10) / 5
+Philippines_GDP <- as.data.frame(Philippines_GDP)
+Philippines_GDP_10Year_Mean <- (Philippines_GDP$Year.1 + Philippines_GDP$Year.2 + Philippines_GDP$Year.3 + Philippines_GDP$Year.4 + Philippines_GDP$Year.5 + Philippines_GDP$Year.6 + Philippines_GDP$Year.7 + Philippines_GDP$Year.8 + Philippines_GDP$Year.9 + Philippines_GDP$Year.10) / 10
+
+Senegal_MPI <- as.data.frame(Senegal_MPI)
+Senegal_MPI_10Year_Mean <- (Senegal_MPI$Year.1.2 + Senegal_MPI$Year.3.4 + Senegal_MPI$Year.5.6 + Senegal_MPI$Year.7.8 + Senegal_MPI$Year.9.10) / 5
+Senegal_GDP <- as.data.frame(Senegal_GDP)
+Senegal_GDP_10Year_Mean <- (Senegal_GDP$Year.1 + Senegal_GDP$Year.2 + Senegal_GDP$Year.3 + Senegal_GDP$Year.4 + Senegal_GDP$Year.5 + Senegal_GDP$Year.6 + Senegal_GDP$Year.7 + Senegal_GDP$Year.8 + Senegal_GDP$Year.9 + Senegal_GDP$Year.10) / 10
+
+Sierra_Leone_MPI <- as.data.frame(Sierra_Leone_MPI)
+Sierra_Leone_MPI_10Year_Mean <- (Sierra_Leone_MPI$Year.1.2 + Sierra_Leone_MPI$Year.3.4 + Sierra_Leone_MPI$Year.5.6 + Sierra_Leone_MPI$Year.7.8 + Sierra_Leone_MPI$Year.9.10) / 5
+Sierra_Leone_GDP <- as.data.frame(Sierra_Leone_GDP)
+Sierra_Leone_GDP_10Year_Mean <- (Sierra_Leone_GDP$Year.1 + Sierra_Leone_GDP$Year.2 + Sierra_Leone_GDP$Year.3 + Sierra_Leone_GDP$Year.4 + Sierra_Leone_GDP$Year.5 + Sierra_Leone_GDP$Year.6 + Sierra_Leone_GDP$Year.7 + Sierra_Leone_GDP$Year.8 + Sierra_Leone_GDP$Year.9 + Sierra_Leone_GDP$Year.10) / 10
+
+South_Africa_MPI <- as.data.frame(South_Africa_MPI)
+South_Africa_MPI_10Year_Mean <- (South_Africa_MPI$Year.1.2 + South_Africa_MPI$Year.3.4 + South_Africa_MPI$Year.5.6 + South_Africa_MPI$Year.7.8 + South_Africa_MPI$Year.9.10) / 5
+South_Africa_GDP <- as.data.frame(South_Africa_GDP)
+South_Africa_GDP_10Year_Mean <- (South_Africa_GDP$Year.1 + South_Africa_GDP$Year.2 + South_Africa_GDP$Year.3 + South_Africa_GDP$Year.4 + South_Africa_GDP$Year.5 + South_Africa_GDP$Year.6 + South_Africa_GDP$Year.7 + South_Africa_GDP$Year.8 + South_Africa_GDP$Year.9 + South_Africa_GDP$Year.10) / 10
+
+Suriname_MPI <- as.data.frame(Suriname_MPI)
+Suriname_MPI_10Year_Mean <- (Suriname_MPI$Year.1.2 + Suriname_MPI$Year.3.4 + Suriname_MPI$Year.5.6 + Suriname_MPI$Year.7.8 + Suriname_MPI$Year.9.10) / 5
+Suriname_GDP <- as.data.frame(Suriname_GDP)
+Suriname_GDP_10Year_Mean <- (Suriname_GDP$Year.1 + Suriname_GDP$Year.2 + Suriname_GDP$Year.3 + Suriname_GDP$Year.4 + Suriname_GDP$Year.5 + Suriname_GDP$Year.6 + Suriname_GDP$Year.7 + Suriname_GDP$Year.8 + Suriname_GDP$Year.9 + Suriname_GDP$Year.10) / 10
+
+Togo_MPI <- as.data.frame(Togo_MPI)
+Togo_MPI_10Year_Mean <- (Togo_MPI$Year.1.2 + Togo_MPI$Year.3.4 + Togo_MPI$Year.5.6 + Togo_MPI$Year.7.8 + Togo_MPI$Year.9.10) / 5
+Togo_GDP <- as.data.frame(Togo_GDP)
+Togo_GDP_10Year_Mean <- (Togo_GDP$Year.1 + Togo_GDP$Year.2 + Togo_GDP$Year.3 + Togo_GDP$Year.4 + Togo_GDP$Year.5 + Togo_GDP$Year.6 + Togo_GDP$Year.7 + Togo_GDP$Year.8 + Togo_GDP$Year.9 + Togo_GDP$Year.10) / 10
+
+Zimbabwe_MPI <- as.data.frame(Zimbabwe_MPI)
+Zimbabwe_MPI_10Year_Mean <- (Zimbabwe_MPI$Year.1.2 + Zimbabwe_MPI$Year.3.4 + Zimbabwe_MPI$Year.5.6 + Zimbabwe_MPI$Year.7.8 + Zimbabwe_MPI$Year.9.10) / 5
+Zimbabwe_GDP <- as.data.frame(Zimbabwe_GDP)
+Zimbabwe_GDP_10Year_Mean <- (Zimbabwe_GDP$Year.1 + Zimbabwe_GDP$Year.2 + Zimbabwe_GDP$Year.3 + Zimbabwe_GDP$Year.4 + Zimbabwe_GDP$Year.5 + Zimbabwe_GDP$Year.6 + Zimbabwe_GDP$Year.7 + Zimbabwe_GDP$Year.8 + Zimbabwe_GDP$Year.9 + Zimbabwe_GDP$Year.10) / 10
+```
+## Crearting our data matrix (Add hist graphs per country)
+```{r}
+MPI_10Year_Mean_Total <- cbind(Bangladesh_MPI_10Year_Mean, D.R.Congo_MPI_10Year_Mean, Dominican_Republic_MPI_10Year_Mean, Jordan_MPI_10Year_Mean, Lesotho_MPI_10Year_Mean, Malawi_MPI_10Year_Mean, Mongolia_MPI_10Year_Mean, Morocco_MPI_10Year_Mean, Nigeria_MPI_10Year_Mean, Peru_MPI_10Year_Mean, Philippines_MPI_10Year_Mean, Senegal_MPI_10Year_Mean, Sierra_Leone_MPI_10Year_Mean, South_Africa_MPI_10Year_Mean, Suriname_MPI_10Year_Mean, Togo_MPI_10Year_Mean, Zimbabwe_MPI_10Year_Mean)
+MPI_10Year_Mean_Total
+
+GDP_10Year_Mean_Total <- cbind(c(Bangladesh_GDP_10Year_Mean, D.R.Congo_GDP_10Year_Mean, Dominican_Republic_GDP_10Year_Mean, Jordan_GDP_10Year_Mean, Lesotho_GDP_10Year_Mean, Malawi_GDP_10Year_Mean, Mongolia_GDP_10Year_Mean, Morocco_GDP_10Year_Mean, Nigeria_GDP_10Year_Mean, Peru_GDP_10Year_Mean, Philippines_GDP_10Year_Mean, Senegal_GDP_10Year_Mean, Sierra_Leone_GDP_10Year_Mean, South_Africa_GDP_10Year_Mean, Suriname_GDP_10Year_Mean, Togo_GDP_10Year_Mean, Zimbabwe_GDP_10Year_Mean))
+GDP_10Year_Mean_Total
+```
+## Creating our dataframe
+```{r}
+Data <- cbind(GDP_10Year_Mean_Total, MPI_10Year_Mean_Total)
+colnames(Data) <- c('GDP', 'MPI')
+data <- as.data.frame(Data)
+```
+## Looking at the mean, variance and t-statistic for each category
+```{r}
+GDP_Mean <- mean(data$GDP)
+GDP_Var <- var(data$GDP)
+GDP_Mean
+GDP_Var
+t.test(data$GDP)
+
+MPI_mean <- mean(data$MPI)
+MPI_Var <- var(data$MPI)
+MPI_mean
+MPI_Var
+t.test(data$GDP)
+```
+## Running a SLR for 2 categories
+```{r}
+lmodMPI = lm(MPI ~ GDP, data = data)
+summary(lmodMPI)
+plot(lmodMPI)
+
+lmodGDP = lm(GDP ~ MPI, data = data)
+summary(lmodGDP)
+plot(lmodGDP)
+```

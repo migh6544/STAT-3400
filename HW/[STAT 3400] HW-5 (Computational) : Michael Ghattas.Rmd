@@ -1,0 +1,236 @@
+# Computational Homework #5
+
+        **Due by midnight on Saturday October 23 2021**. Answer all of the following problems. These problems should be completed in this notebook (using the R kernel). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+
+## Computational Problems
+
+### Problem  #1
+
+Load the ${\tt prostate}$ data into R using the faraway package. The prostate data frame has 97 rows and 9 columns. It comes from a study on 97 men with prostate cancer who were due to receive a radical prostatectomy.
+
+
+```{R}
+library(faraway)
+data(prostate)
+head(prostate)
+```
+
+#### (a) Conduct MLR with lpsa as the response and all of the other variables as predictors. Compute the 90% and 95% confidence intervals for the parameter associated with the age variable. Using these intervals, what could we have deduced about the p-value for age in the regression summary. 
+
+
+```{R}
+mlr = lm(prostate$lpsa ~ prostate$lcavol + prostate$lweight + prostate$age + prostate$lbph + prostate$svi + prostate$lcp + prostate$gleason + prostate$pgg45)
+head(mlr)
+
+confint(mlr, level = 0.90)
+head(mlr)
+
+confint(mlr, level = 0.95)
+head(mlr)
+
+summary(mlr)
+```
+
+
+
+#### (b) In class, we discussed a reason why conducting several individual hypothesis tests (e.g., t-tests for regression parameters) is problematic. It turns out that computing individual confidence intervals has a similar issue. Instead, we might compute a "joint confidence region" for several parameters.  Compute and display the 95% joint confidence region for the parameters associated with age and lbph. Plot the origin on this display. The location of the origin on the display tells us the outcome of a certain hypothesis test. State the test and its outcome. 
+
+The ellipse package and corresponding function should help here. Use the code below (and help files) as a guide.
+
+
+```{R}
+mlr2 = lm(prostate$lpsa + prostate$lcavol + prostate$lweight + prostate$svi + prostate$lcp + prostate$gleason + prostate$pgg45 ~ prostate$age + prostate$lbph)
+confint(mlr2, level = 0.95)
+summary(mlr2)
+
+print("H0: The regression coefficient is zero | H1: The regression coefficient is not zero")
+print("P-value of age = 0.00723 which is < alpha 0.05 so we reject H0") 
+print("P-value of lbph = 0.88676 which is > alpha 0.05 so we fail to reject H0") 
+
+plot(mlr2)
+
+
+
+```
+
+
+#### (c) Remove all predictors that are not significant at the $\alpha = 0.05$ level. Test this model against the original model. Which model is preferred?
+
+
+```{R}
+mlr3 = lm(prostate$age ~ prostate$lpsa + prostate$lcavol + prostate$lweight + prostate$lbph + prostate$svi + prostate$lcp + prostate$gleason + prostate$pgg45)
+summary(mlr3)
+plot(mlr3)
+
+mlr4 = lm(prostate$age ~ prostate$lpsa + prostate$svi + prostate$lcp + prostate$gleason + prostate$pgg45)
+summary(mlr4)
+plot(mlr4)
+
+print("First model is preferred.")
+```
+
+
+
+### Problem #2
+
+This [link](https://www.colorado.edu/amath/sites/default/files/attached-files/advertising.txt) contains advertising data. This dataset contains, in thousands of dollars, TV, Radio, and Newspaper budgets for 200 different markets along with the Sales, in thousands of units, for each market.
+
+#### (a) Load the dataset using the link above and split the data into a training set and a test set, as done in the previous homework. (Remove the variable X.)
+
+
+```{R}
+require(tidyr)
+rawData <- read.csv(url("https://www.colorado.edu/amath/sites/default/files/attached-files/advertising.txt"))
+df = separate(data = rawData, col = 1, into = c("Market", "TV", "Radio", "Newspaper", "Sales"))
+print(df)
+
+smp_size <- floor(0.80 * nrow(df))
+
+set.seed(1111)
+train_ind <- sample(seq_len(nrow(df)), size = smp_size)
+
+train <- df[train_ind, ]
+test <- df[-train_ind, ]
+
+head(train, 10)
+head(test, 10)
+```
+
+#### (b) Fit the full MLR model. Which variables are statistically significant at the 5% level? Discuss the difference between statistical and practical significance in this context. Also, the estimate for newspaper is negative. Do you actually think that sales *suffer* as a result of newspaper advertising?
+
+
+```{R}
+market <- as.numeric(df$Market)
+tv <- as.numeric(df$TV)
+radio <- as.numeric(df$Radio)
+newspaper <- as.numeric(df$Newspaper)
+sales <- as.numeric(df$Sales)
+model <- cbind.data.frame(market, tv, radio, newspaper, sales)
+
+mlr5 = lm(model$sales ~ model$tv + model$market + model$radio + model$newspaper)
+summary(mlr5)
+
+print("Radio is the only significant variable at the 5% level. Statistaclly radio has the only p-value below alpha 0.05, which means its the only variable that is of segnificance for our question. Practically, the sales resolts could be dependant on unknown variables. The etimator for the newspaper is n ot negative.")
+```
+
+
+
+#### (c) Imagine that, in your test set, you don't have any response measurements. Compute predictions--including 95% *prediction* intervals--of sales for all measurements in your test set. Print the prediction MSE and the first five prediction intervals.
+
+
+```{R}
+testMarket <- as.numeric(test$Market)
+testTV <- as.numeric(test$TV)
+testRadio <- as.numeric(test$Radio)
+testNewspaper <- as.numeric(test$Newspaper)
+testSales <- as.numeric(test$Sales)
+testModel <- cbind.data.frame(testMarket, testTV, testRadio, testNewspaper, testSales)
+
+testMLR = lm(testModel$testSales ~ testModel$testTV + testModel$testMarket + testModel$testRadio + testModel$testNewspaper)
+summary(testMLR)
+plot(testMLR)
+
+testSample <- length(testSales)
+print(testSample)
+
+testMean <- mean(testSales)
+print(testMean)
+
+testSD <- sd(testSales, na.rm = TRUE)
+testSE <- (testSD / testSample)
+print(testSE)
+
+testAlpha = 0.05
+
+testDF = (testSample - 1)
+testCV = qt(testAlpha / 2, testDF, lower.tail = F)
+print(testCV)
+
+testME = (testCV * testSE)
+testLB = testMean - testME
+testUB = testMean + testME
+testCI = c(testLB, testUB)
+print(testCI)
+
+```
+
+#### (d) Add some polynomial terms to the model. Specifically, add $TV^2$ and $radio^2$ to the model. To do this, you'll need to use the I() function: I(predictor^2). Comment on the significance of these terms. Assume $\alpha = 0.05$.
+
+
+```{R}
+testMarket <- as.numeric(test$Market)
+testTV <- as.numeric(test$TV)
+testRadio <- as.numeric(test$Radio)
+testNewspaper <- as.numeric(test$Newspaper)
+testSales <- as.numeric(test$Sales)
+testModel <- cbind.data.frame(testMarket, testTV, testRadio, testNewspaper, testSales)
+
+testMLR = lm(testModel$testSales ~ testModel$testTV^2 + testModel$testMarket^2 + testModel$testRadio^2 + testModel$testNewspaper^2)
+summary(testMLR)
+plot(testMLR)
+
+testSample <- length(testSales)
+print(testSample)
+
+testMean <- mean(testSales)
+print(testMean)
+
+testSD <- sd(testSales, na.rm = TRUE)
+testSE <- (testSD / testSample)
+print(testSE)
+
+testAlpha = 0.05
+
+testDF = (testSample - 1)
+testCV = qt(testAlpha / 2, testDF, lower.tail = F)
+print(testCV)
+
+testME = (testCV * testSE)
+testLB = testMean - testME
+testUB = testMean + testME
+testCI = c(testLB, testUB)
+print(testCI)
+
+print("No change to original model observed.")
+```
+
+
+
+#### (e) Is it surprising that $R^2$ increased from the model in (c) to the model in (d)? Explain why or why not.
+
+As per the above, no such observation was present!
+
+#### (f) Conduct a test (not just individual t-tests) to decide whether you should keep the quadratic terms in your model.
+
+
+```{R}
+#### It seems I have an error in steps c & d, since difference in observation exists to run test on. 
+```
+
+
+
+### Problem #3
+
+#### For the teengamb data, fit a model with gamble as the response and the other variables as predictors. Look for violations of:
+
+1. Constant Variance
+2. Normality
+3. Linearity
+
+#### Write a short report detailing your findings.
+
+
+```{R}
+library(faraway)
+data(teengamb)
+head(teengamb)
+mlrModel = lm(teengamb$gamble ~ teengamb$sex + teengamb$status + teengamb$income + teengamb$verbal)
+summary(mlrModel)
+plot(mlrModel)
+```
+
+
+```{R}
+### Points 24 and 39 seem to exhibit a constant variance violation. From the Cook's distance diagram, it seems we should test the model withpout point 24 to gage its influence. Point 39 seems to be a leverage point. Aside from those two points, the model seems to have no violations or unusual observations.
+```

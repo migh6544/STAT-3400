@@ -1,0 +1,173 @@
+# Computational Homework #2
+
+**Due by midnight on Friday September 17, 2021. Submit on Canvas**. Answer all of the following problems. These problems should be completed in this notebook (using the R kernel). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+
+## Problem #1
+
+Load ${\tt hubble.txt}$ into R. A description of the variables can be obtained from page 73 of https://cran.r-project.org/web/packages/gamair/gamair.pdf.
+
+
+```{R}
+library(gamair)
+data(hubble)
+```
+
+#### (a) Calculate the 85% confidence interval for the mean of a galaxy's distance from Earth in Mega parsecs in R by doing the computation explicitly.
+
+
+```{R}
+set.seed(150)
+
+n <- length(hubble$x)
+mean(hubble$x) + c(-1,1) * qt(1-.15/2,df = n-1) * sd(hubble$x)/sqrt(n)
+```
+
+#### (b) Can you find a built in R function that does this computation automatically? 
+
+
+```{R}
+set.seed(150)
+t.test(hubble$x, conf.level = .85)
+```
+
+#### (c) Interpret the confidence interval.
+
+### This means we are 85% confident that our interval contains the true mean of a galaxy's distance from Earth. This claim means that if we were to collect these measurements repeatedly and calculate the same confidence interval, about 85% of them would cover the true mean.
+
+## Problem #2
+
+#### (a) Use ${\tt rbinom()}$ to generate $m = 500$ random numbers from a binomial distribution with $n = 50$ and $p = 0.3$. Store these values in $x$. Describe what $n$ and $p$ are, and state any assumptions needed for the binomial distribution to be an appropriate model.
+
+
+```{R}
+set.seed(150)
+
+m = 500
+n = 50
+p = 0.3;
+x = rbinom(m,n,p)
+
+head(x,31)
+
+### We are utilizing the CLT to obtain a normal distribution from the binomial distribution by increasing the samples from (n) to (m).
+```
+
+#### (b) Print a density histogram of $x$. Describe why the distribution looks the way that it does (i.e., why do many values fall near 15, and very few/no values near 0 or 50?). Print the sample mean of $x$. Is it what you might expect? Print the sample standard deviation of $x$.
+
+
+```{R}
+set.seed(150)
+hist(x, freq = FALSE)
+xBar = mean(x)
+s = sd(x)
+
+xBar
+s
+
+print("The sample mean value is different from the t-test. This is expected as the t-test provides us with an approximated estimate of the sample mean, where the increase in samples from 50 to 500 brings the binomial distribution of the samples closer to a real normal distribution with a more accurate expected value of the sample mean.")
+```
+
+#### (c) Parts (a) and (b) suggest that the binomial distribution can be approximated by a normal distribution (when $np > 10$ and $np(1-p) > 10$, roughly). *Which* normal distribution (i.e., what should the mean and variance of that normal distribution be)? 
+
+### mean = (expexted value of the sample mean) = (1/n) * sum(x) = Meu
+### variance = (expexted value of the (sample mean)^2) - (expexted value of the (sample mean))^2 = sigma^2
+### As the binomial distribution gets close to the normal distribution the mean and variance values -> (Meu = np) and (sigma^2 = np(1-p)) 
+
+## Problem #3
+
+Suppose that $X_1,...,X_n \overset{iid}{\sim} Bernoulli(p)$. When $np > 10$ and $np(1-p) >10$, the following formula represents an approximate $(1-\alpha)\times 100\%$ confidence interval for the population proportion/probability $p$:
+
+$$\widehat{p} \pm z_{\alpha/2}\sqrt{\frac{\widehat{p}(1-\widehat{p})}{n}}.$$
+
+#### (a) Describe why we can use a normal $z$ interval (i.e., why we can use $z_{\alpha/2}$) when the distribution of $\widehat{p} = \frac{\sum^n_{i=1}X_i}{n}$ is, *strictly speaking*, not normal.
+
+### P-Hat here represents an aproximation of the probability from the bernulli, and the value represents the sample mean eastimate. Similarly, the value of p(1-p) represents the variance estimate, which leads to the standard deviation estimate. Thus even if we are not dealing with a normal distribution, the large sample size (n > 30) and known sigam enable us to utilize the z-distribution.
+
+#### (b) Let $n = 50$ and $p = 0.7$.  Simulate $m = 1,000$ samples of size $n$ from $Bernoulli(p)$. Now forget that you know $p$. Compute an $85\%$ confidence interval for $p$ for each of the $m$ samples using the formula from (a). Print out the first interval, state whether it covers $p$, and interpret the interval.
+
+
+```{R}
+set.seed(150)
+
+m = 1000
+n = 50
+p = 0.7
+alpha = 0.15
+x = rbinom(m,n,p)
+
+phat = x/n;
+ci = cbind(phat - qnorm(1-alpha/2)*sqrt(phat*(1-phat)/n), phat + qnorm(1-alpha/2)*sqrt(phat*(1-phat)/n))
+
+head(ci,1)
+
+print("We can clearly see the interval falls betwwen (0,1) and thus covers (p), where the confidence interval represents an estimate, with 85% confidance, representing the value-range of the bernulli probability.")
+```
+
+#### (c) Calculate an estimate of the coverage of the confidence interval using the simulation above. Is it close to 85%? (The Unit #0 Code might help here!)
+
+
+```{R}
+set.seed(150)
+
+coverage = sum(ci[,1] < p & ci[,2] > p)/m
+
+head(ci)
+coverage
+
+print("Yes, the same!")
+```
+
+## Problem #4
+
+We might be interested in computing confidence intervals for parameters other than a mean, $\mu$, proportion, $p$, etc. For many of these parameters, standard statistical theory will not help. In this problem, we will compute a 95% confidence interval for the rate parameter of an exponential distribution. 
+
+A theoretical model suggests that $X$, the time to breakdown of an insulating fluid between electrodes at a particular voltage, has an exponential distribution: $f(x; \lambda) = \lambda e^{-\lambda x}$. A random sample of $n = 10$ breakdown times (minutes) is given here:
+
+$$
+41.53, 18.73, 2.99, 30.34, 12.33, 117.52, 73.02, 223.63, 4, 26.78.
+$$
+
+#### (a)  Construct a matrix of $B = 10,000$ columns, where each column is a sample of size $n = 10$ (sampled with replacement) from the above 10 numbers. (HINT: use the sample function in R.) 
+
+
+
+```{R}
+set.seed(150)
+
+B = 10000
+x = c(41.53, 18.73, 2.99, 30.34, 12.33, 117.52, 73.02, 223.63, 4, 26.78); 
+b = replicate(B, sample(x, replace = TRUE))
+```
+
+#### (b) From each of the $B$ samples, compute the maximum likelihood estimate of $\lambda$. Call this estimator $\widehat{\lambda}$.
+
+
+
+```{R}
+lambdaHat = 1/colMeans(b)
+```
+
+#### (c) You now have a sample of size $B$ from the *distribution* of the estimator $\widehat{\lambda}$. Construct a histogram and comment on the distribution.
+
+
+
+```{R}
+set.seed(150)
+
+hist(lambdaHat)
+
+print("The graph is indective of an exponential distribution, with most of the values clustered closer to the y-axis with (lamdaHat~0.015) .")
+```
+
+
+
+#### (d) Use the quantile function in R to find the 2.5 percentile and the 97.5 percentile. This is a *percentile bootstrap confidence interval* for $\lambda$.
+
+
+
+```{R}
+set.seed(150)
+
+quantile(lambdaHat, c(.25, .975))
+```

@@ -1,0 +1,93 @@
+# Computational Homework #1
+
+**Due in class on Tuesday September 7, 2021 at 11:59PM**. Answer all of the following problems. These problems should be completed in this notebook (using the R kernel). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+## Problem #1
+
+(Same setup as theoretical problem 2): The random variable $X$ can take on the values 0,1,2, and 3 with probabilities $P(X = 0) = p^3$, $P(X = 1) = (1-p)p^2$, $P(X = 2) = (1-p)^2$, and $P(X = 3) = 2p(1-p)$, where $0 < p < 1$. Graph the log likelihood function in R and place a  vertical line at the MLE found in theoretical problem 2. Does it look like the correct maximizer?
+
+## Yes! it looks like it is the optimizer.
+
+```{R}
+set.seed(1)
+l = function(p){
+    l = 24*log(p^3)+54*log(p^2-p^3) + 32*log((1-p)^2) + 40*log(2*p-2*p^2)
+    return(l)
+}
+
+p = seq(0,1,length = 500);
+plot(p,l(p))
+abline(v = 0.582, col = "darkgreen")
+print("Yes! It looks like it is the maximizer.")
+```
+
+
+## Problem #2
+
+In this problem, we will look at the distribution of a particular maximum likelihood estimator (MLE). Remember from class that the MLE is an *estimator*, and as such, it has a probability distribution (because estimators are function of random variables, and thus, are random).
+
+#### (a) Generate $m = 500$ iid samples of size $n=10$ from an exponential distribution with rate $\lambda = 1$. Your result (which you shouldn't print) should be a matrix where each column is a sample of size $n=10$. There should be $m = 500$ columns. 
+
+Note: You can generate a single iid sample of size $n$ using the rexp() function. Also note that you should be able to generate the $m$ samples without using a loop!
+
+
+
+```{R}
+set.seed(1)
+M = 500; n = 10
+Samples = matrix(rep(0,n*M),M,n)
+x = replicate(M, rexp(n,rate=1))
+```
+5
+#### (b) For each sample (each column), calculate the MLE of $\lambda$, denoted $\widehat\lambda$, using the formula derived in theoretical problem 5. The result should be a vector of size $m$. Call it mle. Since $m$ is large, this mle vector should be a good approximation of the true distribution of $\widehat\lambda$. Construct a histogram of mle and comment on its distribution: where is it centered? is it symmetric or skewed? high or low variability (with respect to the original population)?
+
+
+```{R}
+set.seed(1)
+mle = (1 / colMeans(x))
+
+Distribution = apply(Samples,1,mean)
+hist(mle, nclass=30, freq=F, main="Sampling mle, n = 10")
+dens = density(mle)
+lines(dens$x,dens$y,col=2)
+print("It is centered around (0.9 - 1.1) and skewed to the Right with a High-variability.")
+```
+
+
+```R
+#### (c) Now, using the result in theoretical problem 5b, calculate the MLE for the population mean (i.e., the expected value of the exponential distribution) for each sample that you constructed in part (a). call the resulting vector mle_mean. Then construct a histogram of mle_mean and comment on its distribution.
+```
+
+
+```{R}
+set.seed(1)
+mle_mean = (colMeans(x))
+
+hist(mle_mean, nclass=30, freq=F, main="Sampling mle_mean, n = 10")
+dens = density(mle_mean)
+lines(dens$x,dens$y,col=2)
+print("It is centered around (0.9 - 1.1) and skewed to the Right with a Low-variability.")
+```
+
+#### (d) Repeat parts (a)-(c) of this question, but change the sample size to $n = 100$. What do you notice about the shape of  the resulting distributions? In the case of the MLE for the mean, what theorem (discussed in class and in applied probability) is this an example of?
+
+
+```{R}
+set.seed(1)
+M = 500; n = 100
+Samples = matrix(rep(0,n*M),M,n)
+y = replicate(M, rexp(n,rate=1))
+```
+
+
+```{R}
+set.seed(1)
+mle_mean = (colMeans(y))
+
+hist(mle_mean, nclass=30, freq=F, main="Sampling mle_mean, n = 100")
+dens = density(mle_mean)
+lines(dens$x,dens$y,col=2)
+print("It is centered and more normalized, indictive of the Central Limit Theorem.")
+```
+
+

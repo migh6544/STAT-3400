@@ -1,0 +1,160 @@
+# Computational Homework #3
+
+**Due by midnight on Monday October 27, 2021. Submit on Canvas**. Answer all of the following problems. These problems should be completed in this notebook (using the R kernel). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+
+## Problem #1
+
+#### Load the ${\tt wine}$ dataset into R. This dataset is available in the ${\tt gamair}$ library. A description of the variables can be obtained [here](https://cran.r-project.org/web/packages/gamair/gamair.pdf).
+
+
+```{R}
+library(gamair)
+data(wine)
+head(wine, 40)
+```
+
+#### (a) Suppose that you'd like to conduct a hypothesis test at the $\alpha = 0.02$ level to decide whether the true mean temperature (C) at harvest is less than 18 degrees C. State the null and alternative hypotheses.
+
+### H_0: mean > 18 degrees C
+### H_1: mean < 18 degrees C
+
+#### (b) Conduct the appropriate hypothesis test using the p-value method. Clearly state your conclusion.
+
+```{R}
+set.seed(150)
+
+n <- length(wine)
+m <- 18
+xbar <- mean(wine$s.temp)
+s <- sd(wine$s.temp)
+
+t <- (xbar-m)/(s/sqrt(n))
+p <- pnorm(t)
+p
+print("P < alpha, thus we reject the null hypothesis that the the true mean temperature (C) at harvest is > 18 degrees.")
+```
+
+
+
+#### (c) Can you find a built in R function that does this computation automatically? 
+
+
+```{R}
+set.seed(150)
+
+t.test(wine$s.temp, conf.level = .98)
+p <- pnorm(t)
+
+p
+```
+
+## Problem #2
+
+Let's consider a situation where our data, $X_1,...,X_n$ are randomly sampled from a normal distribution and we want to test a claim about the variance, $\sigma^2$. It turns out that if the population is normal, then
+\begin{align*}
+T = \frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1).
+\end{align*}
+That is, the statistic $T$ has a "chi-squared distribution" with $n-1$ degrees of freedom. Don't worry if you've never seen this distribution before; you can learn a few things about it [here](https://en.wikipedia.org/wiki/Chi-squared_distribution). We can use $T$ to test claims about a population variance. In this exercise, let's consider testing $$H_0: \sigma^2 = 1 \,\,\, vs \,\,\, H_1: \sigma^2 > 1,$$ at the $\alpha = 0.05$ level. We're going to run simulations to understand the properties of the this test. First, we'll generate many samples under $H_0$. Then, we'll generate many samples under a particular value in $H_1$. 
+
+#### (a) Generate $m = 1000$ samples of size $n = 10$ from a standard normal distribution. The result should be an $n$ by $m$ matrix (call it x0). Note: here, we are generating data under $H_0$.
+
+
+```{R}
+set.seed(150)
+
+m = 1000
+n = 10
+x0 = matrix(rep(rnorm(m, 0, 1),m*n),n,m)
+
+dim(x0)
+head(x0)
+```
+
+#### (b) For each sample of size $n = 10$ (each column), calculate $T$, assuming that $H_0$ is true. The result should be a vector of length $m = 1000$. Print a density histogram of $T$, and overlay the pdf for $\chi^2(n-1)$ (use the lines() and dchisq() functions ). Does it appear that the distribution of $T$ follows the specified chi-squared distribution?
+
+
+```{R}
+set.seed(150)
+
+c <- dchisq(x0, m-1)
+Tc <- apply(x0, 1, c)
+hist(x0, freq = FALSE)
+dens = density(Tc)
+lines(dens$x,dens$y,col=2)
+dim(Tc)
+print("No,looks closer to a normal distribution.")
+```
+
+#### (c) Calculate the p-value for each value of $T$. Call the result pvalue. The p-value in this case will be the probability (calculated using the cdf of $\chi^2(n-1)$), that you get a test statistic at least as extreme (large) as the one you got, assuming $H_0$.  The result, pvalue, should be a vector of length $m$. Print a density histogram of these pvalue. Comment on the shape of the distribution.
+
+
+```{R}
+set.seed(150)
+
+pvalue = rnorm(Tc, 0, 1)
+
+head(pvalue, 10)
+```
+
+
+
+#### (d) Suppose that $\alpha = 0.05$, and we plan on rejecting $H_0$ when the p-value is less than $\alpha$. Use your result from part (c) to estimate the probability of type I error. Is your estimate close to the true probability of type I error?
+
+
+```{R}
+set.seed(150)
+
+Ht <- (sum(pvalue / m) / 100)
+Ht
+
+print("Yes, P < alpha, thus we would reject the null hypothesis.")
+```
+
+#### (e) Now, generate $m = 1000$ samples of size $n = 10$ from a $N(0,2)$. The result should be an $n$ by $m$ matrix (call it x1). Note: here, we are generating data under a particular value in $H_1$ (namely, $\sigma^2 = 2$). 
+
+The goal for the remaining parts is to see what happens when the null is false, but we conduct a hypothesis test as usual (*assuming* the null is true).
+
+
+```{R}
+set.seed(150)
+
+m = 1000
+n = 10
+x1 = matrix(rep(rnorm(m, 0, 2),m*n),n,m)
+
+dim(x1)
+head(x1)
+```
+
+#### (f) For each sample of size $n = 10$ (each column) in x1, calculate $T$, (again, assuming that $H_0$ is true). Call these new $T$'s T2. The result, T2, should be a vector of length $m = 1000$. Calculate the p-value for each value in T2 (again, assuming $H_0$); call the result pvalue2. Plot pvalue2 using a density histogram.
+
+
+```{R}
+set.seed(150)
+
+C <- dchisq(x1, m-1)
+T2 <- apply(x1, 1, c)
+
+pvalue2 = rnorm(T2, 0, 1)
+
+hist(pvalue2, freq = FALSE)
+dens = density(pvalue2)
+lines(dens$x,dens$y,col=2)
+```
+
+#### (g) Estimate the probability of type II error when $\sigma^2 = 2$. That is, estimate the probability that you fail to reject $H_0$ (i.e., that the pvalue is greater than $\alpha = 0.05$) when $H_1: \sigma^2 = 2$ is true.
+
+
+```{R}
+set.seed(150)
+
+HT <- (sum(pvalue2 / m) / 100)
+HT
+
+print("P < alpha, thus we will reject the null hypothesis.")
+```
+
+#### (h) Interpret the result from part (g). What does this mean? Is this a good test procedure if the true value for $\sigma^2$ is 2? What might make the test more "powerful"?
+
+## With a larger SD, we have a wider spread, alowing more room for possible values, and thus reducing the value of P, making it less likely to reject the null hypothesis. More powerful, as a higher CI could come from SD > 2, as the spread will widen. More accurate reults can be gained from SD < 2, as it narrows our spread closer to the mean.

@@ -1,0 +1,151 @@
+# Computational Homework #4
+
+**Due by midnight on Monday October 11, 2021. Submit on Canvas**. Answer all of the following problems. These problems should be completed in this notebook (using the R kernel). Computational questions may require code, plots, analysis, interpretation, etc. Working in small groups is allowed, but it is important that you make an effort to master the material and hand in your own work. 
+
+
+
+### Problem #1
+
+#### Run a simulation to build evidence for or against the following claim: The simple linear regression line fitted to the points in the scatter plot of $Y$ versus $\widehat{Y}$ has zero intercept and a unit slope.
+
+To do this, simulate some data with a known slope and intercept parameters, then fit an SLR model to the data, and plot the response vs the fitted values.
+
+
+```{R}
+set.seed(1111)
+
+x = rnorm(275, 1, 3)
+z = rnorm(275, -1, 2)
+c = rnorm(275, 0, 1)
+
+y = (x + z - c)
+
+mod = lm(y ~ c)
+summary(mod)
+
+yHat = fitted.values(mod)
+model = lm(y ~ yHat)
+summary(model)
+
+plot(model)
+
+print("Based on the results, we can see the points in the scatter plot of (Y) Vs.(yHat) has zero intercept and a unit slope.")
+```
+
+### Problem #2
+
+This [link](https://www.colorado.edu/amath/sites/default/files/attached-files/advertising.txt) contains advertising data. This dataset contains, in thousands of dollars, TV, Radio, and Newspaper budgets for 200 different markets along with the Sales, in thousands of units, for each market.
+
+#### (a) Load the dataset using the link above, and explore it graphically and numerically. Are there relationships between variables?
+
+
+```{R}
+require(tidyr)
+rawData <- read.csv(url("https://www.colorado.edu/amath/sites/default/files/attached-files/advertising.txt"))
+head(rawData, 10)
+
+df = separate(data = rawData, col = 1, into = c("Market", "TV", "Radio", "Newspaper", "Sales"))
+print(df)
+
+print("Most rows seem to be decresing and all values are postive.")
+```
+
+#### (b) Randomly split the dataset into two parts: a training set (80% of the data) and a testing set (20% of the data). 
+
+
+```{R}
+smp_size <- floor(0.80 * nrow(df))
+
+set.seed(1111)
+train_ind <- sample(seq_len(nrow(df)), size = smp_size)
+
+train <- df[train_ind, ]
+test <- df[-train_ind, ]
+
+head(train, 10)
+head(test, 10)
+```
+
+#### (c) Conduct simple linear regression, using the lm() function and your training set, with sales as the response, and radio as the predictor. Print a summary and interpret the estimated coefficients. Write out the estimated regression equation.
+
+
+```{R}
+radio = df[, 3]
+sales = df[, 5]
+radioSales = lm(radio ~ sales)
+summary(radioSales)
+print("The SD is around 3.32 on 169 0f the 200 samples tested. The CD-R^2 is around 0.65. The data is not very well fitted to the modle. ")
+```
+
+
+
+#### (c) Plot the data and overlay the least squares regression line. Report and interpret the coefficient of determination.
+
+
+```{R}
+plot(radioSales)
+print("CD is high, clearly the data is not very well fitted to the modle.")
+```
+
+#### (d) Plot the residuals (y) against the fitted values (x). Does the variability in the residuals look constant as the fitted values increase? Interpret why that might be important. Also, produce a normal QQ-plot of the residuals. If the points of the QQ-plot roughly follow the line $y = x$, then we don't have evidence against normality of the residuals. How does the QQ-plot look for these residuals?
+
+
+```{R}
+radioSales.resid = resid(radioSales)
+plot(radioSales.resid)
+print("Yes, with the exception of 2 samples, this a good indication that the difference between the observed and fitted data across the samples is very similar or constant.")
+
+radioSales.stdres = rstandard(radioSales)
+qqnorm(radioSales.stdres)
+qqline(radioSales.stdres, col = "red")
+
+print("The points of the QQ-plot roughly follow the line (y = x), thus we don't have evidence against normality of the residuals.")
+```
+
+#### (e) We learned that, often, the goal of regression is to make predictions on new data. Let's see how well the model does at predicting values that we left out of the training set.
+
+#### We can get a sense of how well the model does at predicting by computing the prediction mean squared error (MSE):
+
+$$ MSE = \frac{1}{n}\sum^n_{i=1}\bigg(y_i - \widehat{y}_i \bigg)^2.$$
+
+####  Compute the MSE for the data in the training set, and for data in the testing set. Which one is lower? Explain why you think it's lower.
+
+
+```{R}
+radioSlaes.train = lm(radio ~ sales, data = train)
+yHat.train <- predict(radioSlaes.train)
+#train.MSE <- mean((train$Radio - yHat.train)^2)
+print("Can not figure out how to make this work?")
+```
+
+### Problem #3
+
+Now let's perform multiple linear regression using the dataset from the previous problem.
+
+
+#### (a) Perform MLR, using your training set, using sales as the response and all other variables as predictors.
+
+
+```{R}
+#x <- (train$Market + train$TV + train$Radio + train$Newspaper)
+#mlr <- lm(x ~ Sales, data = train)
+#summary(mlr)
+```
+
+#### (b) Interpret the estimated coefficient associated with TV. Interpret the coefficient of determination.
+
+There is seems to be an error in my output, values are wrong!
+
+#### (c) Plot the residuals (y) against the fitted values (x). Do you notice any curvature in the residual plot? Also, produce a normal QQ-plot of the residuals. Do you have any worries about the normality of the residuals?
+
+
+```{R}
+print("Could not continue here as I could not get the previous part to work?")
+```
+
+#### (c) Compute the MSE for the data in the training set, and for data in the testing set. Which one is lower? Explain why you think it's lower.
+
+
+```{R}
+print("Could not continue here as I could not get the previous part to work?")
+```
